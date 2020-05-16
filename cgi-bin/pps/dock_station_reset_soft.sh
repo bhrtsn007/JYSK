@@ -1,16 +1,19 @@
 #!/bin/bash
-abandon_order () {
-    echo "Abandoning Order : <<'$1'>>........... "
+dock_station_reset_soft () {
+    echo "Soft Reset Dockstation_ID : " $1
     echo "<br>"
-    sudo /opt/butler_server/erts-9.3.3.6/bin/escript /home/gor/rpc_call.escript station_recovery abandon_order "[<<\"$1\">>]."
+    echo '<pre>'
+    sudo /opt/butler_server/bin/butler_server rpcterms station_recovery reset_dockstation_soft $1.
+    echo '</pre>'
 }
+
 echo "Content-type: text/html"
 echo ""
 
 echo '<html>'
 echo '<head>'
 echo '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">'
-echo '<title>Abandon Any Order</title>'
+echo '<title>Soft Reset Dockstation id</title>'
 echo '</head>'
 echo '<body style="background-color:#B8B8B8">'
 
@@ -24,8 +27,8 @@ echo "<br>"
 
   echo "<form method=GET action=\"${SCRIPT}\">"\
        '<table nowrap>'\
-          '<tr><td>ORDER_ID</TD><TD><input type="number" name="ORDER_ID" size=12></td></tr>'\
-		  '</tr></table>'
+         '<tr><td>Dockstation_ID</TD><TD><input type="number" name="Dockstation_ID" size=12></td></tr>'\
+		 '</tr></table>'
 
   echo '<br><input type="submit" value="SUBMIT">'\
        '<input type="reset" value="Reset"></form>'
@@ -40,17 +43,18 @@ echo "<br>"
   fi
 
   # If no search arguments, exit gracefully now.
-  #echo "$QUERY_STRING<br>"
+  echo "$QUERY_STRING<br>"
   echo "<br>"
   if [ -z "$QUERY_STRING" ]; then
         exit 0
   else
    # No looping this time, just extract the data you are looking for with sed:
      XX=`echo "$QUERY_STRING" | sed -r 's/([^0-9]*([0-9]*)){1}.*/\2/'`
-	
-     echo "ORDER_ID: " $XX
+		
+     echo "Dockstation_ID: " $XX
      echo '<br>'
-     abandon_order $XX 
+	   dock_station_reset_soft $XX 
+     
   fi
 echo '</body>'
 echo '</html>'

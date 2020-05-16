@@ -1,11 +1,11 @@
 #!/bin/bash
 sku_information () {
-    product_uid=`sshpass -p '9)MntJFsj(H7' ssh -o StrictHostKeyChecking=no -t gor@172.19.40.34 "/home/gor/easy_console/get_item_uid.sh $1" | head -3 | tail -1 | grep -o '[[:digit:]]*'`
+    product_uid=`sshpass -p '46VNZk7zrWhm' ssh -o StrictHostKeyChecking=no -t gor@10.236.8.46 "/home/gor/easy_console/get_item_uid.sh $1" | head -3 | tail -1 | grep -o '[[:digit:]]*'`
     echo "<br>"
     echo "Internal Id for SKU is:" $product_uid
     echo "<br>"
     echo '<pre>'
-    sudo /opt/butler_server/erts-9.3.3.6/bin/escript /home/gor/rpc_call.escript inventory get_by_id "[<<\"$product_uid\">>]."
+    sudo /opt/butler_server/erts-9.3.3.6/bin/escript /home/gor/rpc_call.escript inventory search_by "[[{'item_uid', 'equal', <<\"$product_uid\">>}], 'record']."
     echo '</pre>'
 }
 echo "Content-type: text/html"

@@ -1,10 +1,11 @@
 #!/bin/bash
-taskkey_from_order () {
-    echo "All task associated with ORDER_ID : <<'$1'>>"
+order_notification () {
+    echo "Sending order notification for Order Id : <<'$1'>>"
     echo "<br>"
     echo '<pre>'
-    sudo /opt/butler_server/erts-9.3.3.6/bin/escript /home/gor/rpc_call.escript ppstaskrec get_task_details_for_order "[<<\"$1\">>]."
+    sudo /opt/butler_server/erts-9.3.3.6/bin/escript /home/gor/rpc_call.escript station_recovery send_notification "[{'order_notification',[<<\"$1\">>]}]."
     echo '</pre>'
+
 }
 echo "Content-type: text/html"
 echo ""
@@ -12,7 +13,7 @@ echo ""
 echo '<html>'
 echo '<head>'
 echo '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">'
-echo '<title>Task Details from Order</title>'
+echo '<title>Send Order notification</title>'
 echo '</head>'
 echo '<body style="background-color:#B8B8B8">'
 
@@ -52,7 +53,7 @@ echo "<br>"
 	
      echo "ORDER_ID: " $XX
      echo '<br>'
-     taskkey_from_order $XX
+     order_notification $XX  
   fi
 echo '</body>'
 echo '</html>'

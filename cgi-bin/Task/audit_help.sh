@@ -1,12 +1,17 @@
 #!/bin/bash
-order_details () {
-    echo "Packing Box : <<'$1'>>  Info"
+auditrec () {
+    echo "###############################     Audit cycle    ###################################"
     echo "<br>"
-    echo "Order Id associated with this Packing box:"
+    echo "<br>"
     echo '<pre>'
-    sudo /opt/butler_server/erts-9.3.3.6/bin/escript /home/gor/rpc_call.escript butler_test_functions find_entry "[<<\"$1\">>]."
+    sudo /opt/butler_server/erts-9.3.3.6/bin/escript /home/gor/rpc_call.escript station_recovery audit_help "['audit']."      
     echo '</pre>'
-
+    echo "############################       Auditline cycle     ###################################"
+    echo "<br>"
+    echo "<br>"
+    echo '<pre>'
+    sudo /opt/butler_server/erts-9.3.3.6/bin/escript /home/gor/rpc_call.escript station_recovery audit_help "['auditline']."      
+    echo '</pre>'
 }
 echo "Content-type: text/html"
 echo ""
@@ -14,7 +19,7 @@ echo ""
 echo '<html>'
 echo '<head>'
 echo '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">'
-echo '<title>Order id from packing box</title>'
+echo '<title>Specific audit rec</title>'
 echo '</head>'
 echo '<body style="background-color:#B8B8B8">'
 
@@ -28,7 +33,7 @@ echo "<br>"
 
   echo "<form method=GET action=\"${SCRIPT}\">"\
        '<table nowrap>'\
-          '<tr><td>PACKING_BOX_ID</TD><TD><input type="number" name="PACKING_BOX_ID" size=12></td></tr>'\
+          '<tr><td>Task_key</TD><TD><input type="text" name="Task_key" size=12></td></tr>'\
 		  '</tr></table>'
 
   echo '<br><input type="submit" value="SUBMIT">'\
@@ -50,13 +55,13 @@ echo "<br>"
         exit 0
   else
    # No looping this time, just extract the data you are looking for with sed:
-     XX=`echo "$QUERY_STRING" | sed -r 's/([^0-9]*([0-9]*)){1}.*/\2/'`
+     XX=`echo "$QUERY_STRING" | sed -n 's/^.*Task_key=\([^&]*\).*$/\1/p' | sed "s/%20/ /g"`
 	
-     echo "PACKING_BOX_ID: " $XX
-     echo '<br>'
-     order_details $XX  
+     echo "Task_key: " $XX
+     echo '<br>'      
+     auditrec $XX
   fi
 echo '</body>'
 echo '</html>'
 
-
+exit 0
